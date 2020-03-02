@@ -29,7 +29,9 @@ You will be asked for the following authentication details on installation. To a
 
 | Field | Install-Time Environment Variable | Description |
 | --- | --- | --- |
-| **userAgent** | `CRANK_AUTOMATONINC_ON24__USERAGENT` | User Agent String |
+| **clientId** | `CRANK_AUTOMATONINC_ON24__CLIENTID` | Client ID |
+| **tokenKey** | `CRANK_AUTOMATONINC_ON24__TOKENKEY` | Token Key |
+| **tokenSecret** | `CRANK_AUTOMATONINC_ON24__TOKENSECRET` | Token Secret |
 
 ```shell-session
 # Re-authenticate by running this
@@ -45,7 +47,9 @@ Scenario files.
 <!-- stepDetails -->
 | Name (ID) | Expression | Expected Data |
 | --- | --- | --- |
-| **Check a field on a JSON Placeholder user**<br>(`UserFieldEqualsStep`) | `the (?<field>.+) field on JSON Placeholder user (?<email>.+) should (?<operator>be less than\|be greater than\|be\|contain\|not be\|not contain) (?<expectedValue>.+)` | - `email`: User's email address <br><br>- `field`: Field name to check <br><br>- `operator`: Check Logic (be, not be, contain, not contain, be greater than, or be less than) <br><br>- `expectedValue`: Expected field value |
+| **Check a field on an ON24 registrant**<br>(`CheckRegistrantField`) | `the (?<field>.+) field on ON24 registrant (?<email>.+) for event (?<eventId>\d+) should (?<operator>be less than\|be greater than\|be\|contain\|not be\|not contain) (?<expectedValue>.+)` | - `email`: Registrant's email address <br><br>- `eventId`: Event ID <br><br>- `field`: Field name to check <br><br>- `operator`: Check Logic (be, not be, contain, not contain, be greater than, or be less than) <br><br>- `expectedValue`: Expected field value |
+| **Create an ON24 registrant**<br>(`CreateRegistrant`) | `create an ON24 registrant for event (?<eventId>\d+)` | - `eventId`: Event ID <br><br>- `registrant`: A Map of registrant fields and their values. |
+| **Forget an ON24 registrant**<br>(`ForgetRegistrant`) | `forget that (?<email>.+) registered for ON24 event (?<eventId>\d+)` | - `email`: Registrant's email address <br><br>- `eventId`: Event ID |
 <!-- stepDetailsEnd -->
 
 ## Development and Contributing

@@ -1,29 +1,28 @@
+/*tslint:disable:import-name*/
+
 import * as grpc from 'grpc';
-import * as needle from 'needle';
+import On24 from 'node-on24';
 import { Field } from '../core/base-step';
 import { FieldDefinition } from '../proto/cog_pb';
-import { UserAwareMixin } from './mixins';
+import { RegistrantAwareMixin } from './mixins';
 
-/**
- * This is a wrapper class around the API client for your Cog. An instance of
- * this class is passed to the constructor of each of your steps, and can be
- * accessed on each step as this.client.
- */
 class ClientWrapper {
 
-  /**
-   * This is an array of field definitions, each corresponding to a field that
-   * your API client requires for authentication. Depending on the underlying
-   * system, this could include bearer tokens, basic auth details, endpoints,
-   * etc.
-   *
-   * If your Cog does not require authentication, set this to an empty array.
-   */
   public static expectedAuthFields: Field[] = [{
-    field: 'userAgent',
+    field: 'clientId',
+    type: FieldDefinition.Type.NUMERIC,
+    description: 'Client ID',
+    help: 'This is the numeric Client ID, found on your API Dashboard when creating the token.',
+  }, {
+    field: 'tokenKey',
     type: FieldDefinition.Type.STRING,
-    description: 'User Agent String',
-    help: 'This is for demonstration purposes only. In an actual Cog, you would use this field to describe how to find this auth field in the underlying system.',
+    description: 'Token Key',
+    help: 'This alphanumeric string can be found on the API Dashboard.',
+  }, {
+    field: 'tokenSecret',
+    type: FieldDefinition.Type.STRING,
+    description: 'Token Secret',
+    help: 'This alphanumeric string can be found on the API Dashboard.',
   }];
 
   /**
@@ -44,21 +43,19 @@ class ClientWrapper {
    *   simplify automated testing. Should default to the class/constructor of
    *   the underlying/wrapped API client.
    */
-  constructor (auth: grpc.Metadata, clientConstructor = needle) {
-    // Call auth.get() for any field defined in the static expectedAuthFields
-    // array here. The argument passed to get() should match the "field" prop
-    // declared on the definition object above.
-    const uaString: string = auth.get('userAgent').toString();
-    this.client = clientConstructor;
-
+  constructor (auth: grpc.Metadata, clientConstructor = On24) {
     // Authenticate the underlying client here.
-    this.client.defaults({ user_agent: uaString });
+    this.client = new clientConstructor({
+      clientId: Number(auth.get('clientId')),
+      tokenKey: auth.get('tokenKey').toString(),
+      tokenSecret: auth.get('tokenSecret').toString(),
+    });
   }
 
 }
 
-interface ClientWrapper extends UserAwareMixin {}
-applyMixins(ClientWrapper, [UserAwareMixin]);
+interface ClientWrapper extends RegistrantAwareMixin {}
+applyMixins(ClientWrapper, [RegistrantAwareMixin]);
 
 function applyMixins(derivedCtor: any, baseCtors: any[]) {
   baseCtors.forEach((baseCtor) => {
