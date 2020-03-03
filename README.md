@@ -1,5 +1,7 @@
 # ON24 Cog
 
+[![CircleCI](https://circleci.com/gh/run-crank/cog-on24/tree/master.svg?style=svg)](https://circleci.com/gh/run-crank/cog-on24/tree/master)
+
 This is a [Crank][what-is-crank] Cog for ON24, providing
 steps and assertions for you to validate the state and behavior of your
 ON24 instance.
