@@ -38,11 +38,23 @@ describe('Cog:GetManifest', () => {
         return field.toObject();
       });
 
-      // Useragent auth field
-      const ua: any = authFields.filter(a => a.key === 'userAgent')[0];
-      expect(ua.type).to.equal(FieldDefinition.Type.STRING);
-      expect(ua.optionality).to.equal(FieldDefinition.Optionality.REQUIRED);
-      expect(!!ua.help).to.equal(true);
+      // Client ID auth field
+      const cid: any = authFields.filter(a => a.key === 'clientId')[0];
+      expect(cid.type).to.equal(FieldDefinition.Type.NUMERIC);
+      expect(cid.optionality).to.equal(FieldDefinition.Optionality.REQUIRED);
+      expect(!!cid.help).to.equal(true);
+
+      // Token Key auth field
+      const tKey: any = authFields.filter(a => a.key === 'tokenKey')[0];
+      expect(tKey.type).to.equal(FieldDefinition.Type.STRING);
+      expect(tKey.optionality).to.equal(FieldDefinition.Optionality.REQUIRED);
+      expect(!!tKey.help).to.equal(true);
+
+      // Token Secret auth field
+      const tSecret: any = authFields.filter(a => a.key === 'tokenKey')[0];
+      expect(tSecret.type).to.equal(FieldDefinition.Type.STRING);
+      expect(tSecret.optionality).to.equal(FieldDefinition.Optionality.REQUIRED);
+      expect(!!tSecret.help).to.equal(true);
 
       done();
     });
@@ -52,9 +64,17 @@ describe('Cog:GetManifest', () => {
     cogUnderTest.getManifest(null, (err, manifest: CogManifest) => {
       const stepDefs: StepDefinition[] = manifest.getStepDefinitionsList();
 
-      // Step definitions list includes user-field-equals step.
-      const hasUserFieldEquals: boolean = stepDefs.filter(s => s.getStepId() === 'UserFieldEqualsStep').length === 1;
-      expect(hasUserFieldEquals).to.equal(true);
+      // Step definitions list includes create-registrant step.
+      const hasCreateRegistrant: boolean = stepDefs.filter(s => s.getStepId() === 'CreateRegistrant').length === 1;
+      expect(hasCreateRegistrant).to.equal(true);
+
+      // Step definitions list includes check-registrant-field step.
+      const hasCheckRegistrantField: boolean = stepDefs.filter(s => s.getStepId() === 'CheckRegistrantField').length === 1;
+      expect(hasCheckRegistrantField).to.equal(true);
+
+      // Step definitions list includes check-registrant-field step.
+      const hasForgetRegistrant: boolean = stepDefs.filter(s => s.getStepId() === 'ForgetRegistrant').length === 1;
+      expect(hasForgetRegistrant).to.equal(true);
 
       done();
     });
