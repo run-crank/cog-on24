@@ -15,8 +15,11 @@ steps:
       firstname: '{{test.first}}'
       lastname: '{{test.last}}'
       company: '{{test.org}}'
+      marketingemail: true
 - step: Then the firstname field on ON24 registrant {{test.email}} for event 2211253 should be {{test.first}}
 - step: And the lastname field on ON24 registrant {{test.email}} for event 2211253 should not be {{test.first}}
 - step: And the company field on ON24 registrant {{test.email}} for event 2211253 should contain Laiz
 - step: And the createtimestamp field on ON24 registrant {{test.email}} for event 2211253 should be less than 2050-01-01
+- step: And the marketingemail field on ON24 registrant {{test.email}} for event 2211253 should be true
+- step: And the marketingemail field on ON24 registrant {{test.email}} for event 2211253 should be Y
 - step: Finally, forget that {{test.email}} registered for ON24 event 2211253

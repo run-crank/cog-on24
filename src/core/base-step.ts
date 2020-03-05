@@ -91,6 +91,16 @@ export abstract class BaseStep {
     return util.compare(operator, actualValue, value);
   }
 
+  convertBooleanToOn24YesNo(fieldedObject: any) {
+    Object.keys(fieldedObject).forEach((key) => {
+      if (fieldedObject[key] === true || fieldedObject[key] === 'true') {
+        fieldedObject[key] = 'Y';
+      } else if (fieldedObject[key] === false || fieldedObject[key] === 'false') {
+        fieldedObject[key] = 'N';
+      }
+    })
+  }
+
   protected pass(message: string, messageArgs: any[] = [], records: StepRecord[] = []): RunStepResponse {
     const response = this.outcomelessResponse(message, messageArgs);
     response.setOutcome(RunStepResponse.Outcome.PASSED);

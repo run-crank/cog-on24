@@ -73,6 +73,28 @@ describe('CreateRegistrant', () => {
     expect(registrantEmail.type).to.equal(FieldDefinition.Type.EMAIL);
   });
 
+  it('should convert true/false to Y/N before creation', async () => {
+    apiClientStub.createEventRegistrant.resolves();
+    protoStep.setData(Struct.fromJavaScript({
+      eventId: 123,
+      registrant: {
+        boolTrue: true,
+        stringTrue: 'true',
+        boolFalse: false,
+        stringFalse: 'false',
+      },
+    }));
+
+    await stepUnderTest.executeStep(protoStep);
+
+    expect(apiClientStub.createEventRegistrant).to.have.been.calledWith(123, {
+      boolTrue: 'Y',
+      stringTrue: 'Y',
+      boolFalse: 'N',
+      stringFalse: 'N',
+    });
+  });
+
   it('should respond with pass if API client resolves expected data', async () => {
     // Stub a response that matches expectations.
     const expectedRegistrant: any = {email: 'expected@example.com'};
