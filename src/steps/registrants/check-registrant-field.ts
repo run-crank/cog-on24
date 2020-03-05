@@ -53,14 +53,16 @@ export class CheckRegistrantField extends BaseStep implements StepInterface {
   }];
 
   async executeStep(step: Step): Promise<RunStepResponse> {
-    let apiRes: any;
     const stepData: any = step.getData().toJavaScript();
+    this.convertBooleanToOn24YesNo(stepData);
+
     const eventId: number = stepData.eventId;
     const email: string = stepData.email;
     const field: string = stepData.field;
     const expectedValue: string = stepData.expectedValue;
     const operator: string = stepData.operator.toLowerCase();
     let actualValue: any;
+    let apiRes: any;
 
     // Search ON24 for registrant.
     try {

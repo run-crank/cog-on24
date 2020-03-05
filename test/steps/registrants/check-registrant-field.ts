@@ -89,6 +89,24 @@ describe('CheckRegistrantField', () => {
     expect(registrantEmail.type).to.equal(FieldDefinition.Type.EMAIL);
   });
 
+  it('should convert true/false to Y/N before check', async () => {
+    // Stub a response that matches expectations.
+    const expectedRegistrant: any = {someField: 'N'};
+    apiClientStub.getEventRegistrantByEmail.resolves({registrants: [expectedRegistrant]});
+
+    // Set step data corresponding to expectations (note false instead of N).
+    protoStep.setData(Struct.fromJavaScript({
+      field: 'someField',
+      expectedValue: false,
+      email: 'anything@example.com',
+      operator: 'be',
+      eventId: 123,
+    }));
+
+    const response: RunStepResponse = await stepUnderTest.executeStep(protoStep);
+    expect(response.getOutcome()).to.equal(RunStepResponse.Outcome.PASSED);
+  });
+
   it('should respond with pass if API client resolves expected data', async () => {
     // Stub a response that matches expectations.
     const expectedRegistrant: any = {someField: 'Expected Value'};

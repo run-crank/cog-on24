@@ -38,14 +38,16 @@ export class CreateRegistrant extends BaseStep implements StepInterface {
   }];
 
   async executeStep(step: Step): Promise<RunStepResponse> {
-    let apiRes: any;
     const stepData: any = step.getData().toJavaScript();
     const eventId: number = stepData.eventId;
     const registrant: Record<string, any> = stepData.registrant;
 
+    // Convert any true/false values (or strings) to expected 'Y' or 'N' values.
+    this.convertBooleanToOn24YesNo(registrant);
+
     // Search ON24 for registrant.
     try {
-      apiRes = await this.client.createEventRegistrant(eventId, registrant);
+      const apiRes = await this.client.createEventRegistrant(eventId, registrant);
       const registrantRecord = this.keyValue('registrant', 'Created Registrant', apiRes);
       return this.pass('Successfully created registrant %s for event %d.', [apiRes.email, eventId], [registrantRecord]);
     } catch (e) {
