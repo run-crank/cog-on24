@@ -98,7 +98,7 @@ export abstract class BaseStep {
       } else if (fieldedObject[key] === false || fieldedObject[key] === 'false') {
         fieldedObject[key] = 'N';
       }
-    })
+    });
   }
 
   protected pass(message: string, messageArgs: any[] = [], records: StepRecord[] = []): RunStepResponse {

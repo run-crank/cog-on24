@@ -1,3 +1,5 @@
+/*tslint:disable:import-name*/
+
 import On24 from 'node-on24';
 import { ListEventRegistrantResult, Registrant, ForgetRegistrantResult } from 'node-on24/dist/interfaces';
 
