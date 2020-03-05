@@ -42,7 +42,7 @@ export class ForgetRegistrant extends BaseStep implements StepInterface {
     // Search ON24 for registrant.
     try {
       apiRes = await this.client.forgetEventRegistrantByEmail(eventId, email);
-      const registrantRecord = this.keyValue('registrant', 'Created Registrant', {
+      const registrantRecord = this.keyValue('registrant', 'Forgotten Registrant', {
         email,
         eventuserid: apiRes.deletedregistrants.eventuserids[0],
       });
