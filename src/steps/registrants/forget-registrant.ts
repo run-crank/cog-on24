@@ -21,7 +21,7 @@ export class ForgetRegistrant extends BaseStep implements StepInterface {
   protected expectedRecords: ExpectedRecord[] = [{
     id: 'registrant',
     type: RecordDefinition.Type.KEYVALUE,
-    dynamicFields: true,
+    dynamicFields: false,
     fields: [{
       field: 'eventuserid',
       description: 'Event User ID',
