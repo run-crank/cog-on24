@@ -58,7 +58,7 @@ describe('ForgetRegistrant', () => {
     // Registrant record
     const registrant: any = records.filter(r => r.id === 'registrant')[0];
     expect(registrant.type).to.equal(RecordDefinition.Type.KEYVALUE);
-    expect(registrant.mayHaveMoreFields).to.equal(true);
+    expect(registrant.mayHaveMoreFields).to.equal(false);
 
     // Registrant record eventuserid field
     const userId: any = registrant.guaranteedFieldsList.filter(f => f.key === 'eventuserid')[0];
