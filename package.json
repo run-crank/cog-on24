@@ -1,6 +1,6 @@
 {
   "name": "cog-on24",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "ON24 Cog for use with Crank",
   "license": "MIT",
   "cog": {
