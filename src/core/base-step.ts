@@ -1,7 +1,9 @@
-import { ClientWrapper } from '../client/client-wrapper';
-import { StepDefinition, FieldDefinition, Step as PbStep, RunStepResponse, StepRecord, TableRecord, BinaryRecord, RecordDefinition } from '../proto/cog_pb';
+import { StepDefinition, FieldDefinition, RecordDefinition, Step as PbStep, RunStepResponse, StepRecord, TableRecord, BinaryRecord } from '../proto/cog_pb';
 import { Struct, Value } from 'google-protobuf/google/protobuf/struct_pb';
 import * as util from '@run-crank/utilities';
+
+// tslint:disable:triple-equals
+// tslint:disable:no-else-after-return
 
 export interface StepInterface {
   getId(): string;
@@ -33,7 +35,7 @@ export abstract class BaseStep {
   protected expectedRecords?: ExpectedRecord[];
   protected stepHelp?: string;
 
-  constructor(protected client: ClientWrapper) { }
+  constructor(protected client) { }
 
   getId(): string {
     return this.constructor.name;
@@ -55,10 +57,6 @@ export abstract class BaseStep {
       expectedField.setType(field.type);
       expectedField.setKey(field.field);
       expectedField.setDescription(field.description);
-
-      if (field.hasOwnProperty('help')) {
-        expectedField.setHelp(field.help);
-      }
 
       if (field.hasOwnProperty('optionality')) {
         expectedField.setOptionality(field.optionality);
@@ -87,8 +85,8 @@ export abstract class BaseStep {
     return stepDefinition;
   }
 
-  compare(operator: string, actualValue: string, value: string): boolean {
-    return util.compare(operator, actualValue, value);
+  assert(operator: string, actualValue: string, value: string, field: string): util.AssertionResult {
+    return util.assert(operator, actualValue, value, field);
   }
 
   convertBooleanToOn24YesNo(fieldedObject: any) {
