@@ -52,7 +52,7 @@ describe('CheckRegistrantField', () => {
     const email: any = fields.filter(f => f.key === 'email')[0];
     expect(email.optionality).to.equal(FieldDefinition.Optionality.REQUIRED);
     expect(email.type).to.equal(FieldDefinition.Type.EMAIL);
-    expect(!!email.help).to.equal(true);
+    expect(email.help).to.not.equal(undefined);
 
     // Operator field
     const operator: any = fields.filter(f => f.key === 'operator')[0];
