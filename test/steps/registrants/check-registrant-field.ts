@@ -28,7 +28,7 @@ describe('CheckRegistrantField', () => {
     expect(stepDef.getStepId()).to.equal('CheckRegistrantField');
     expect(stepDef.getName()).to.equal('Check a field on an ON24 registrant');
     expect(!!stepDef.getHelp()).to.equal(true);
-    expect(stepDef.getExpression()).to.equal('the (?<field>.+) field on ON24 registrant (?<email>.+) for event (?<eventId>\\d+) should (?<operator>be less than|be greater than|be|contain|not be|not contain) (?<expectedValue>.+)');
+    expect(stepDef.getExpression()).to.equal('the (?<field>.+) field on ON24 registrant (?<email>.+) for event (?<eventId>\\d+) should (?<operator>be set|not be set|be less than|be greater than|be one of|be|contain|not be one of|not be|not contain) ?(?<expectedValue>.+)?');
     expect(stepDef.getType()).to.equal(StepDefinition.Type.VALIDATION);
   });
 
@@ -52,7 +52,7 @@ describe('CheckRegistrantField', () => {
     const email: any = fields.filter(f => f.key === 'email')[0];
     expect(email.optionality).to.equal(FieldDefinition.Optionality.REQUIRED);
     expect(email.type).to.equal(FieldDefinition.Type.EMAIL);
-    expect(!!email.help).to.equal(true);
+    expect(email.help).to.not.equal(undefined);
 
     // Operator field
     const operator: any = fields.filter(f => f.key === 'operator')[0];
@@ -61,7 +61,7 @@ describe('CheckRegistrantField', () => {
 
     // Expected Value field
     const expectedValue: any = fields.filter(f => f.key === 'expectedValue')[0];
-    expect(expectedValue.optionality).to.equal(FieldDefinition.Optionality.REQUIRED);
+    expect(expectedValue.optionality).to.equal(FieldDefinition.Optionality.OPTIONAL);
     expect(expectedValue.type).to.equal(FieldDefinition.Type.ANYSCALAR);
   });
 

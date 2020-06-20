@@ -3,12 +3,13 @@ import { FieldDefinition, RunStepResponse, Step, StepDefinition, RecordDefinitio
 
 import { baseOperators } from './../../client/constants/operators';
 import * as util from '@run-crank/utilities';
+import { isNullOrUndefined } from 'util';
 
 export class CheckRegistrantField extends BaseStep implements StepInterface {
 
   protected stepName: string = 'Check a field on an ON24 registrant';
   protected stepType: StepDefinition.Type = StepDefinition.Type.VALIDATION;
-  protected stepExpression: string = 'the (?<field>.+) field on ON24 registrant (?<email>.+) for event (?<eventId>\\d+) should (?<operator>be less than|be greater than|be|contain|not be|not contain) (?<expectedValue>.+)';
+  protected stepExpression: string = 'the (?<field>.+) field on ON24 registrant (?<email>.+) for event (?<eventId>\\d+) should (?<operator>be set|not be set|be less than|be greater than|be one of|be|contain|not be one of|not be|not contain) ?(?<expectedValue>.+)?';
   protected stepHelp: string = 'This step attempts to find an event registrant for the given event ID and email, then checks the value of a specified registrant field.';
   protected expectedFields: Field[] = [{
     field: 'email',
@@ -27,11 +28,12 @@ export class CheckRegistrantField extends BaseStep implements StepInterface {
   }, {
     field: 'operator',
     type: FieldDefinition.Type.STRING,
-    description: 'Check Logic (be, not be, contain, not contain, be greater than, or be less than)',
+    description: 'Check Logic (be, not be, contain, not contain, be greater than, be less than, be set, not be set, be one of, or not be one of)',
   }, {
     field: 'expectedValue',
     type: FieldDefinition.Type.ANYSCALAR,
     description: 'Expected field value',
+    optionality: FieldDefinition.Optionality.OPTIONAL,
   }];
   protected expectedRecords: ExpectedRecord[] = [{
     id: 'registrant',
@@ -64,6 +66,10 @@ export class CheckRegistrantField extends BaseStep implements StepInterface {
     let actualValue: any;
     let apiRes: any;
 
+    if (isNullOrUndefined(expectedValue) && !(operator == 'be set' || operator == 'not be set')) {
+      return this.error("The operator '%s' requires an expected value. Please provide one.", [operator]);
+    }
+
     // Search ON24 for registrant.
     try {
       apiRes = await this.client.getEventRegistrantByEmail(eventId, email);
@@ -81,13 +87,13 @@ export class CheckRegistrantField extends BaseStep implements StepInterface {
       const registrantRecord = this.keyValue('registrant', 'Registrant Record', registrant);
       actualValue = registrant[field] || null;
 
-      // If the value of the field matches expectations, pass.
-      if (this.compare(operator, actualValue, expectedValue)) {
-        return this.pass(util.operatorSuccessMessages[operator], [field, expectedValue], [registrantRecord]);
-      }
+      const result = this.assert(operator, actualValue, expectedValue, field);
 
+      // If the value of the field matches expectations, pass.
       // Otherwise, if the value of the field does not match expectations, fail.
-      return this.fail(util.operatorFailMessages[operator], [field, expectedValue, actualValue], [registrantRecord]);
+      return result.valid ? this.pass(result.message, [], [registrantRecord])
+        : this.fail(result.message, [], [registrantRecord]);
+
     } catch (e) {
       if (e instanceof util.UnknownOperatorError) {
         return this.error('%s. Please provide one of: %s', [e.message, baseOperators]);
