@@ -49,7 +49,7 @@ Scenario files.
 <!-- stepDetails -->
 | Name (ID) | Expression | Expected Data |
 | --- | --- | --- |
-| **Check a field on an ON24 registrant**<br>(`CheckRegistrantField`) | `the (?<field>.+) field on ON24 registrant (?<email>.+) for event (?<eventId>\d+) should (?<operator>be less than\|be greater than\|be\|contain\|not be\|not contain) (?<expectedValue>.+)` | - `email`: Registrant's email address <br><br>- `eventId`: Event ID <br><br>- `field`: Field name to check <br><br>- `operator`: Check Logic (be, not be, contain, not contain, be greater than, or be less than) <br><br>- `expectedValue`: Expected field value |
+| **Check a field on an ON24 registrant**<br>(`CheckRegistrantField`) | `the (?<field>.+) field on ON24 registrant (?<email>.+) for event (?<eventId>\d+) should (?<operator>be set\|not be set\|be less than\|be greater than\|be one of\|be\|contain\|not be one of\|not be\|not contain) ?(?<expectedValue>.+)?` | - `email`: Registrant's email address <br><br>- `eventId`: Event ID <br><br>- `field`: Field name to check <br><br>- `operator`: Check Logic (be, not be, contain, not contain, be greater than, be less than, be set, not be set, be one of, or not be one of) <br><br>- `expectedValue`: Expected field value |
 | **Create an ON24 registrant**<br>(`CreateRegistrant`) | `create an ON24 registrant for event (?<eventId>\d+)` | - `eventId`: Event ID <br><br>- `registrant`: A Map of registrant fields and their values. |
 | **Forget an ON24 registrant**<br>(`ForgetRegistrant`) | `forget that (?<email>.+) registered for ON24 event (?<eventId>\d+)` | - `email`: Registrant's email address <br><br>- `eventId`: Event ID |
 <!-- stepDetailsEnd -->
