@@ -204,6 +204,7 @@ workflows:
           context: docker-creds-to-publish-cogs
           requires:
             - test
+            - build
             # - run-test-scenarios
           filters:
             branches:
