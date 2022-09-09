@@ -1,5 +1,5 @@
 import { BaseStep, Field, ExpectedRecord, StepInterface } from '../../core/base-step';
-import { FieldDefinition, RunStepResponse, Step, StepDefinition, RecordDefinition } from '../../proto/cog_pb';
+import { FieldDefinition, RunStepResponse, Step, StepDefinition, RecordDefinition, StepRecord } from '../../proto/cog_pb';
 
 export class DiscoverRegistrant extends BaseStep implements StepInterface {
 
@@ -55,13 +55,22 @@ export class DiscoverRegistrant extends BaseStep implements StepInterface {
       }
 
       const registrant = apiRes.registrants[0];
-      const registrantRecord = this.keyValue('discoverRegistrant', 'Discovered Registrant', registrant);
+      const records = this.createRecords(registrant, stepData['__stepOrder']);
 
-      return this.pass('Successfully discovered fields on registrant', [], [registrantRecord]);
+      return this.pass('Successfully discovered fields on registrant', [], records);
 
     } catch (e) {
       return this.error('There was an error checking the registrant: %s', [e.message]);
     }
+  }
+
+  public createRecords(registrant, stepOrder = 1): StepRecord[] {
+    const records = [];
+    // Base Record
+    records.push(this.keyValue('discoverRegistrant', 'Discovered Registrant', registrant));
+    // Ordered Record
+    records.push(this.keyValue(`discoverRegistrant.${stepOrder}`, `Discovered Registrant from Step ${stepOrder}`, registrant));
+    return records;
   }
 
 }

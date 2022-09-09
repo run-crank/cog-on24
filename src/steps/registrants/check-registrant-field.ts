@@ -1,5 +1,5 @@
 import { BaseStep, Field, ExpectedRecord, StepInterface } from '../../core/base-step';
-import { FieldDefinition, RunStepResponse, Step, StepDefinition, RecordDefinition } from '../../proto/cog_pb';
+import { FieldDefinition, RunStepResponse, Step, StepDefinition, RecordDefinition, StepRecord } from '../../proto/cog_pb';
 
 import { baseOperators } from './../../client/constants/operators';
 import * as util from '@run-crank/utilities';
@@ -84,15 +84,15 @@ export class CheckRegistrantField extends BaseStep implements StepInterface {
       }
 
       const registrant = apiRes.registrants[0];
-      const registrantRecord = this.keyValue('registrant', 'Registrant Record', registrant);
+      const records = this.createRecords(registrant, stepData['__stepOrder']);
       actualValue = registrant[field] || null;
 
       const result = this.assert(operator, actualValue, expectedValue, field);
 
       // If the value of the field matches expectations, pass.
       // Otherwise, if the value of the field does not match expectations, fail.
-      return result.valid ? this.pass(result.message, [], [registrantRecord])
-        : this.fail(result.message, [], [registrantRecord]);
+      return result.valid ? this.pass(result.message, [], records)
+        : this.fail(result.message, [], records);
 
     } catch (e) {
       if (e instanceof util.UnknownOperatorError) {
@@ -103,6 +103,15 @@ export class CheckRegistrantField extends BaseStep implements StepInterface {
       }
       return this.error('There was an error during validation: %s', [e.message]);
     }
+  }
+
+  public createRecords(registrant, stepOrder = 1): StepRecord[] {
+    const records = [];
+    // Base Record
+    records.push(this.keyValue('registrant', 'Registrant Record', registrant));
+    // Ordered Record
+    records.push(this.keyValue(`registrant.${stepOrder}`, `Registrant Record from Step ${stepOrder}`, registrant));
+    return records;
   }
 
 }
