@@ -6,6 +6,8 @@ export class DiscoverRegistrant extends BaseStep implements StepInterface {
   protected stepName: string = 'Discover fields on an ON24 registrant';
   protected stepExpression: string = 'discover fields on ON24 registrant (?<email>.+)';
   protected stepType: StepDefinition.Type = StepDefinition.Type.ACTION;
+  protected actionList: string[] = ['discover'];
+  protected targetObject: string = 'Registrant';
   protected expectedFields: Field[] = [{
     field: 'email',
     type: FieldDefinition.Type.EMAIL,

@@ -9,6 +9,8 @@ export class CheckRegistrantField extends BaseStep implements StepInterface {
 
   protected stepName: string = 'Check a field on an ON24 registrant';
   protected stepType: StepDefinition.Type = StepDefinition.Type.VALIDATION;
+  protected actionList: string[] = ['check'];
+  protected targetObject: string = 'Registrant';
   protected stepExpression: string = 'the (?<field>.+) field on ON24 registrant (?<email>.+) for event (?<eventId>\\d+) should (?<operator>be set|not be set|be less than|be greater than|be one of|be|contain|not be one of|not be|not contain) ?(?<expectedValue>.+)?';
   protected stepHelp: string = 'This step attempts to find an event registrant for the given event ID and email, then checks the value of a specified registrant field.';
   protected expectedFields: Field[] = [{

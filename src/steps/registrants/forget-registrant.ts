@@ -5,6 +5,8 @@ export class ForgetRegistrant extends BaseStep implements StepInterface {
 
   protected stepName: string = 'Forget an ON24 registrant';
   protected stepType: StepDefinition.Type = StepDefinition.Type.ACTION;
+  protected actionList: string[] = ['delete'];
+  protected targetObject: string = 'Registrant';
   protected stepExpression: string = 'forget that (?<email>.+) registered for ON24 event (?<eventId>\\d+)';
   protected stepHelp: string = 'This step attempts to "forget" (or delete) a registrant for the given event ID.';
   protected expectedFields: Field[] = [{
