@@ -5,6 +5,8 @@ export class CreateRegistrant extends BaseStep implements StepInterface {
 
   protected stepName: string = 'Create an ON24 registrant';
   protected stepType: StepDefinition.Type = StepDefinition.Type.ACTION;
+  protected actionList: string[] = ['create'];
+  protected targetObject: string = 'Registrant';
   protected stepExpression: string = 'create an ON24 registrant for event (?<eventId>\\d+)';
   protected stepHelp: string = 'This step attempts to create a registrant for the given event ID.';
   protected expectedFields: Field[] = [{
