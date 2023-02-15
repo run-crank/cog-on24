@@ -1,5 +1,5 @@
 import { BaseStep, Field, ExpectedRecord, StepInterface } from '../../core/base-step';
-import { FieldDefinition, RunStepResponse, Step, StepDefinition, RecordDefinition } from '../../proto/cog_pb';
+import { FieldDefinition, RunStepResponse, Step, StepDefinition, RecordDefinition, StepRecord } from '../../proto/cog_pb';
 
 export class CreateRegistrant extends BaseStep implements StepInterface {
 
@@ -50,11 +50,42 @@ export class CreateRegistrant extends BaseStep implements StepInterface {
     // Search ON24 for registrant.
     try {
       const apiRes = await this.client.createEventRegistrant(eventId, registrant);
-      const registrantRecord = this.keyValue('registrant', 'Created Registrant', apiRes);
-      return this.pass('Successfully created registrant %s for event %d.', [apiRes.email, eventId], [registrantRecord]);
+
+      const registrantResponse = await this.client.getEventRegistrantByEmail(eventId, registrant.email);
+      if (registrantResponse.registrants.length === 0) {
+        // If no results were found, return an error.
+        return this.error('No registrant found for event %d and email %s', [eventId, registrant.email]);
+      }
+
+      const createdRegistrant = registrantResponse.registrants[0];
+
+      const records = this.createRecords(createdRegistrant, stepData['__stepOrder'], Object.keys(registrant));
+      return this.pass('Successfully created registrant %s for event %d.', [apiRes.email, eventId], records);
     } catch (e) {
+      console.log(e);
       return this.error('There was a problem creating the ON24 registrant: %s', [e.toString()]);
     }
+  }
+
+  public createRecords(registrant, stepOrder = 1, fields = []): StepRecord[] {
+    const records = [];
+    // Base Record
+    records.push(this.keyValue('registrant', 'Registrant Record', registrant));
+
+    // Passing Record
+    const filteredData = {};
+    if (registrant) {
+      Object.keys(registrant).forEach((key) => {
+        if (fields.includes(key)) {
+          filteredData[key] = registrant[key];
+        }
+      });
+    }
+    records.push(this.keyValue('exposeOnPass:registrant', 'Created Record', filteredData));
+
+    // Ordered Record
+    records.push(this.keyValue(`registrant.${stepOrder}`, `Registrant Record from Step ${stepOrder}`, registrant));
+    return records;
   }
 
 }
