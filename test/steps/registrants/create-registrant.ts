@@ -19,6 +19,7 @@ describe('CreateRegistrant', () => {
     // An example of how you can stub/mock API client methods.
     apiClientStub = sinon.stub();
     apiClientStub.createEventRegistrant = sinon.stub();
+    apiClientStub.getEventRegistrantByEmail = sinon.stub();
     stepUnderTest = new Step(apiClientStub);
     protoStep = new ProtoStep();
   });
@@ -99,6 +100,9 @@ describe('CreateRegistrant', () => {
     // Stub a response that matches expectations.
     const expectedRegistrant: any = {email: 'expected@example.com'};
     apiClientStub.createEventRegistrant.resolves(expectedRegistrant)
+
+    // Stub a response that matches expectations.
+    apiClientStub.getEventRegistrantByEmail.resolves({registrants: [expectedRegistrant]});
 
     // Set step data corresponding to expectations
     protoStep.setData(Struct.fromJavaScript({
