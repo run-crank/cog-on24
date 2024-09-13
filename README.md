@@ -17,7 +17,7 @@ then run the following.  You'll be prompted to enter your ON24
 credentials once the Cog is successfully installed.
 
 ```shell-session
-$ crank cog:install automatoninc/on24
+$ crank cog:install stackmoxie/on24
 ```
 
 Note: You can always re-authenticate later.
@@ -25,7 +25,7 @@ Note: You can always re-authenticate later.
 ## Usage
 
 ### Authentication
-<!-- run `crank cog:readme automatoninc/on24` to update -->
+<!-- run `crank cog:readme stackmoxie/on24` to update -->
 <!-- authenticationDetails -->
 You will be asked for the following authentication details on installation. To avoid prompts in a CI/CD context, you can provide the same details as environment variables.
 
@@ -37,7 +37,7 @@ You will be asked for the following authentication details on installation. To a
 
 ```shell-session
 # Re-authenticate by running this
-$ crank cog:auth automatoninc/on24
+$ crank cog:auth stackmoxie/on24
 ```
 <!-- authenticationDetailsEnd -->
 
@@ -45,7 +45,7 @@ $ crank cog:auth automatoninc/on24
 Once installed, the following steps will be available for use in any of your
 Scenario files.
 
-<!-- run `crank cog:readme automatoninc/on24` to update -->
+<!-- run `crank cog:readme stackmoxie/on24` to update -->
 <!-- stepDetails -->
 | Name (ID) | Expression | Expected Data |
 | --- | --- | --- |
@@ -67,12 +67,12 @@ as appropriate.
 4. Run `npm start` to validate the Cog works locally (`ctrl+c` to kill it)
 5. Run `crank cog:install --source=local --local-start-command="npm start"` to
    register your local instance of this Cog. You may need to append a `--force`
-   flag or run `crank cog:uninstall automatoninc/on24` if you've already
+   flag or run `crank cog:uninstall stackmoxie/on24` if you've already
    installed the distributed version of this Cog.
 
 ### Adding/Modifying Steps
 Modify code in `src/steps` and validate your changes by running
-`crank cog:step automatoninc/on24` and selecting your step.
+`crank cog:step stackmoxie/on24` and selecting your step.
 
 To add new steps, create new step classes in `src/steps`. Use existing steps as
 a starting point for your new step(s). Note that you will need to run
@@ -94,10 +94,10 @@ Modify the ClientWrapper class at `src/client/client-wrapper.ts`.
 
 Note that you will need to run `crank registry:rebuild` in order for any
 changes to authentication fields to be reflected. Afterward, you can
-re-authenticate this Cog by running `crank cog:auth automatoninc/on24`
+re-authenticate this Cog by running `crank cog:auth stackmoxie/on24`
 
 ### Tests and Housekeeping
 Tests can be found in the `test` directory and run like this: `npm test`.
 Ensure your code meets standards by running `npm run lint`.
 
-[what-is-crank]: https://crank.run?utm_medium=readme&utm_source=automatoninc%2Fon24
+[what-is-crank]: https://crank.run?utm_medium=readme&utm_source=stackmoxie%2Fon24
